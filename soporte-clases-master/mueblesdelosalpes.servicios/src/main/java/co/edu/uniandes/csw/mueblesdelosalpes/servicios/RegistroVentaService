@@ -1,0 +1,49 @@
+package co.edu.uniandes.csw.mueblesdelosalpes.service;
+
+import co.edu.uniandes.csw.mueblesdelosalpes.dto.RegistroVenta;
+import java.util.ArrayList;
+import java.util.List;
+
+public class RegistroVentaService {
+
+    private static List<RegistroVenta> registros = new ArrayList<>();
+
+    public List<RegistroVenta> obtenerRegistros() {
+        return new ArrayList<>(registros);
+    }
+
+    public RegistroVenta obtenerRegistro(int id) {
+        return registros.stream()
+                .filter(registro -> registro.getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public RegistroVenta crearRegistro(RegistroVenta registro) {
+        registro.setId(registros.size() + 1); // Simple auto-increment ID
+        registros.add(registro);
+        return registro;
+    }
+
+    public RegistroVenta actualizarRegistro(int id, RegistroVenta registroActualizado) {
+        RegistroVenta registro = obtenerRegistro(id);
+        if (registro != null) {
+            registro.setFechaVenta(registroActualizado.getFechaVenta());
+            registro.setProducto(registroActualizado.getProducto());
+            registro.setCantidad(registroActualizado.getCantidad());
+            registro.setCiudad(registroActualizado.getCiudad());
+            registro.setComprador(registroActualizado.getComprador());
+            return registro;
+        }
+        return null;
+    }
+
+    public boolean eliminarRegistro(int id) {
+        RegistroVenta registro = obtenerRegistro(id);
+        if (registro != null) {
+            registros.remove(registro);
+            return true;
+        }
+        return false;
+    }
+}
